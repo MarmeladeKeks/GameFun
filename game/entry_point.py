@@ -1,5 +1,8 @@
+from game_rendering import GameRendering
+
+
 def main():
-    print("First commit")
+    main_game = GameRendering()
 
 
 if __name__ == "__main__":
