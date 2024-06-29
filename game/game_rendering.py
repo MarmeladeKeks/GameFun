@@ -1,9 +1,12 @@
+import math
+
 import pygame
 import numpy as np
 
 
 BLUE = (0, 0, 220)
 ROT = (200, 0, 0)
+TIME_FACTOR = 1
 WORLD_GRAV = 0.0005  # (m / s^2)
 
 
@@ -30,7 +33,8 @@ class GameRendering:
 
         # Main Execution Loop
         while game_active:
-            self.time = self.clock.get_time()
+            self.time = self.clock.get_time() * TIME_FACTOR
+            print(self.time)
             self.acceleration = WORLD_GRAV
 
             for event in pygame.event.get():
@@ -53,7 +57,7 @@ class GameRendering:
 
     def handle_key_events(self, event: pygame.event.Event):
         if event.key == pygame.K_SPACE:
-            self.acceleration = -0.025  # setze Beschleunigung nach oben
+            self.acceleration = -0.025 / TIME_FACTOR  # setze Beschleunigung nach oben
             self.vel[1] = 0
             self.jump_cooldown_timer = self.time
             print("Space pressed")
@@ -70,7 +74,7 @@ class GameRendering:
 
     def player_motion(self):
         self.vel[1] += self.acceleration * self.time
-        player_y = self.player[1] + self.vel[1] * self.time
+        player_y = self.player[1] + (self.vel[1]) * self.time
         player_y = self.keep_player_in_bounds(player_y)
         self.player[1] = player_y  # set actual player y Coordinate
 
@@ -85,4 +89,5 @@ class GameRendering:
         ):  # case Fish on bottom
             player_y = pygame.display.get_window_size()[1] - self.player[3]
             # velocity stays because world grav is still impacting the player
+            self.vel[1] = 0
         return player_y
