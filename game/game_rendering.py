@@ -13,10 +13,10 @@ class GameRendering:
         self.clock: pygame.time.Clock = None
         self.rect: np.ndarray = np.array([0, 0, 100, 100, 1], dtype=float)
         self.player: np.ndarray = np.array([0, 320, 20, 20], dtype=float)
-        self.time = 0
+        self.time: float = 0
         self.vel: np.ndarray = np.array([0, 0], dtype=float)
-        self.acceleration = WORLD_GRAV
-        self.jump_cooldown_timer = 0
+        self.acceleration: float = WORLD_GRAV
+        self.jump_cooldown_timer: float = 0
 
         self.render()
 
@@ -39,7 +39,6 @@ class GameRendering:
                 elif event.type == pygame.KEYDOWN:
                     self.handle_key_events(event)
 
-
             # Spielfeld/figur(en) zeichnen (davor Spielfeld löschen) and Game Logic
             self.screen.fill(BLUE)  # clear screen
             self.player_motion()
@@ -54,7 +53,8 @@ class GameRendering:
 
     def handle_key_events(self, event: pygame.event.Event):
         if event.key == pygame.K_SPACE:
-            self.acceleration -= 0.1  # setze Beschleunigung nach oben
+            self.acceleration = -0.025  # setze Beschleunigung nach oben
+            self.vel[1] = 0
             self.jump_cooldown_timer = self.time
             print("Space pressed")
 
@@ -71,13 +71,18 @@ class GameRendering:
     def player_motion(self):
         self.vel[1] += self.acceleration * self.time
         player_y = self.player[1] + self.vel[1] * self.time
-
-        if player_y <= 0:
-            player_y = 0
-            self.vel[1] = 0
-        elif player_y + self.player[3] >= pygame.display.get_window_size()[1]:
-            player_y = pygame.display.get_window_size()[1] - self.player[3]
-            self.vel[1] = 0
-        self.player[1] = player_y
+        player_y = self.keep_player_in_bounds(player_y)
+        self.player[1] = player_y  # set actual player y Coordinate
 
         pygame.draw.rect(self.screen, ROT, rect=self.player)
+
+    def keep_player_in_bounds(self, player_y) -> float:
+        if player_y <= 0:  # case Fish on Roof
+            player_y = 0
+            self.vel[1] = 0  # collide with top resets velocity
+        elif (
+            player_y + self.player[3] >= pygame.display.get_window_size()[1]
+        ):  # case Fish on bottom
+            player_y = pygame.display.get_window_size()[1] - self.player[3]
+            # velocity stays because world grav is still impacting the player
+        return player_y
