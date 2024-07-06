@@ -4,13 +4,16 @@ import pygame
 import numpy as np
 import config
 from game.balken import Balken
+from game.balken_creation import BalkenCreator
 from game.balken_group import BalkenGroup
 from game.player import Player
+import time
 from config import TIME_FACTOR, ROT, BLUE, GREEN, WORLD_GRAV
 
 
 class GameRendering:
     def __init__(self):
+        self.time_to_reach_bottom = None
         self.screen = None
         self.clock: pygame.time.Clock = None
         self.rect: np.ndarray = np.array([0, 0, 100, 100, 1], dtype=float)
@@ -21,6 +24,7 @@ class GameRendering:
 
         self.player = Player(width=20, height=20, game=self)
         self.groups.add(self.player)
+        self.balken_creator = None
 
         self.render()
 
@@ -29,13 +33,22 @@ class GameRendering:
         pygame.display.set_caption("Flappy Nemo")
         self.screen = pygame.display.set_mode((1280, 720), vsync=1)
         self.clock = pygame.time.Clock()
-        config.TIME_TO_REACH_BOTTOM = math.sqrt(
-            (pygame.display.get_window_size()[1] - self.player.rect[2]) / WORLD_GRAV
-        )
-        print(config.TIME_TO_REACH_BOTTOM)
+
+        # Berechnung wie schnell man von ganz oben nach ganz unten fallen kann (Zeit in ms)
+        self.time_to_reach_bottom = (
+            math.sqrt(
+                (pygame.display.get_window_size()[1] - self.player.rect[2]) / WORLD_GRAV
+            )
+            + 1000
+        ) * self.time_factor
+
+        # Zufälliger Balken Creator
+        self.balken_creator = BalkenCreator(self.balken_group, self)
+
+        print(self.time_to_reach_bottom)
 
         # add one balken here for now
-        self.balken_group.add(Balken(pygame.display.get_window_size()[0], 0, 200, self))
+        # self.balken_group.add(Balken(pygame.display.get_window_size()[0], 0, 200, self))
 
         game_active = True
 
@@ -50,6 +63,11 @@ class GameRendering:
                     self.handle_key_events(event)
 
             # Spielfeld/figur(en) zeichnen (davor Spielfeld löschen) and Game Logic
+
+            # Random Balken Creation
+            balken_creation_timer = time.time_ns() // 1_000_000
+            self.balken_creator.random_balken_creation(balken_creation_timer)
+
             self.screen.fill(BLUE)  # clear screen
             self.player.player_motion()
             self.balken_group.move_all_balken()
@@ -59,9 +77,8 @@ class GameRendering:
                 self.player, self.balken_group, dokill=False
             )
             if collision_list:
-                print("Collision detected")
                 self.player.change_player_colour(GREEN)
-
+            print(len(self.balken_group.sprites()))
             # draw all here
             self.groups.draw(self.screen)
             self.balken_group.draw(self.screen)

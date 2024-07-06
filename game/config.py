@@ -11,7 +11,8 @@ WORLD_VEL = 0.2
 
 # Objects
 BALKEN_WIDTH = 22
-
+MIN_GAP = 50
+MIN_BALKEN_HEIGHT = 200
+MAX_DIFFICULTY = 40
 
 # Will be set from the programm
-TIME_TO_REACH_BOTTOM = None
