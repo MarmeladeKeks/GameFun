@@ -17,6 +17,7 @@ class GameRendering:
         self.groups = pygame.sprite.Group()
         self.balken_group = BalkenGroup()
         self.time: float = 0
+        self.time_factor = TIME_FACTOR
 
         self.player = Player(width=20, height=20, game=self)
         self.groups.add(self.player)
@@ -26,7 +27,7 @@ class GameRendering:
     def render(self):
         pygame.init()
         pygame.display.set_caption("Flappy Nemo")
-        self.screen = pygame.display.set_mode((1280, 720))
+        self.screen = pygame.display.set_mode((1280, 720), vsync=1)
         self.clock = pygame.time.Clock()
         config.TIME_TO_REACH_BOTTOM = math.sqrt(
             (pygame.display.get_window_size()[1] - self.player.rect[2]) / WORLD_GRAV
@@ -40,7 +41,7 @@ class GameRendering:
 
         # Main Execution Loop
         while game_active:
-            self.time = self.clock.get_time() * TIME_FACTOR
+            self.time = self.clock.get_time() * self.time_factor
             self.player.setup()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -69,7 +70,7 @@ class GameRendering:
             pygame.display.flip()
 
             # Refresh-Zeiten festlegen
-            self.clock.tick(60)
+            self.clock.tick(120)
 
         pygame.quit()
 

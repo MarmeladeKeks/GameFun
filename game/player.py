@@ -1,7 +1,7 @@
 import pygame.sprite
 import numpy as np
 
-from config import TIME_FACTOR, WORLD_GRAV, ROT
+from config import WORLD_GRAV, ROT
 
 
 class Player(pygame.sprite.Sprite):
@@ -20,8 +20,11 @@ class Player(pygame.sprite.Sprite):
         self.acceleration = WORLD_GRAV
 
     def handle_spacebar_pressed(self):
-        self.acceleration = -0.025 / TIME_FACTOR  # setze Beschleunigung nach oben
-        self.vel[1] = 0
+        # self.acceleration = (
+        #     -0.05 / self.game.time_factor
+        # )  # setze Beschleunigung nach oben
+        self.acceleration = 0
+        self.vel[1] = -0.5
         self.jump_cooldown_timer = self.game.time
 
     def player_motion(self):

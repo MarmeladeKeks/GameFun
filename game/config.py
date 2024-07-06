@@ -5,8 +5,8 @@ BLACK = (0, 0, 0)
 GREEN = (0, 200, 0)
 
 # Physic Constants
-TIME_FACTOR = 2
-WORLD_GRAV = 0.0005  # (m / s^2)
+TIME_FACTOR = 1.0
+WORLD_GRAV = 0.001  # (m / s^2)
 WORLD_VEL = 0.2
 
 # Objects
