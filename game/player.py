@@ -11,7 +11,7 @@ class Player(pygame.sprite.Sprite):
         self.game = game
         self.image = pygame.Surface((width, height))
         self.image.fill(ROT)
-        self.rect = pygame.Rect(0, 320, 20, 20)
+        self.rect = pygame.Rect(30, 320, 20, 20)
         self.vel: np.ndarray = np.array([0, 0], dtype=float)
         self.acceleration: float = WORLD_GRAV
         self.jump_cooldown_timer: float = 0
@@ -41,3 +41,6 @@ class Player(pygame.sprite.Sprite):
             # velocity stays because world grav is still impacting the player
             self.vel[1] = 0
         return player_y
+
+    def change_player_colour(self, color: pygame.Color):
+        self.image.fill(color)
