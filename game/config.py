@@ -6,8 +6,11 @@ GREEN = (0, 200, 0)
 
 # Physic Constants
 TIME_FACTOR = 1.0
-WORLD_GRAV = 0.001  # (m / s^2)
+WORLD_GRAV = 0.003  # (m / s^2)
 WORLD_VEL = 0.2
+BEE_VEL = -0.8
+BEE_ROTATION_UP_VEL = 0.6
+BEE_ROTATION_DOWN_VEL = -0.2
 
 # Objects
 BALKEN_WIDTH = 22

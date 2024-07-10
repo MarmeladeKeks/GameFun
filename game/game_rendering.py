@@ -78,10 +78,12 @@ class GameRendering:
             )
             if collision_list:
                 self.player.change_player_colour(GREEN)
-            print(len(self.balken_group.sprites()))
             # draw all here
             self.groups.draw(self.screen)
             self.balken_group.draw(self.screen)
+
+            # Debug Bee Collision Hitbox
+            # pygame.draw.rect(self.screen, ROT, self.player.rect, 1)
 
             # Fenster aktualisieren
             pygame.display.flip()
