@@ -17,5 +17,5 @@ class Balken(pygame.sprite.Sprite):
     def move_single_balken(self) -> bool:
         self.rect.x += WORLD_VEL * self.game.time * -1
 
-        # Return if the Balken is outside the windom and should be removed
+        # Return if the Balken is outside the window and should be removed
         return self.rect.x + self.rect.width <= 0

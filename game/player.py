@@ -84,7 +84,7 @@ class Player(pygame.sprite.Sprite):
             player_y + self.rect[3] >= pygame.display.get_window_size()[1]
         ):  # case Fish on bottom
             player_y = pygame.display.get_window_size()[1] - self.rect[3]
-            # velocity stays because world grav is still impacting the player
+            # Reset Velocity for the bee
             self.vel[1] = 0
         return player_y
 

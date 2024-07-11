@@ -25,11 +25,13 @@ class GameRendering:
         self.player = Player(width=20, height=20, game=self)
         self.groups.add(self.player)
         self.balken_creator = None
+        self.input_processed = False
 
         self.render()
 
     def render(self):
         pygame.init()
+        pygame.joystick.init()
         pygame.display.set_caption("Flappy Nemo")
         self.screen = pygame.display.set_mode((1280, 720), vsync=1)
         self.clock = pygame.time.Clock()
@@ -41,6 +43,9 @@ class GameRendering:
             )
             + 1000
         ) * self.time_factor
+
+        # Controller Support
+        joysticks = []
 
         # Zufälliger Balken Creator
         self.balken_creator = BalkenCreator(self.balken_group, self)
@@ -57,10 +62,19 @@ class GameRendering:
             self.time = self.clock.get_time() * self.time_factor
             self.player.setup()
             for event in pygame.event.get():
+                if event.type == pygame.JOYDEVICEADDED:
+                    joy = pygame.joystick.Joystick(event.device_index)
+                    joysticks.append(joy)
                 if event.type == pygame.QUIT:
                     game_active = False
                 elif event.type == pygame.KEYDOWN:
                     self.handle_key_events(event)
+
+            # Controller Input
+            if not self.input_processed:
+                for joystick in joysticks:
+                    if joystick.get_button(0):
+                        self.player.handle_spacebar_pressed()
 
             # Spielfeld/figur(en) zeichnen (davor Spielfeld löschen) and Game Logic
 
@@ -83,10 +97,12 @@ class GameRendering:
             self.balken_group.draw(self.screen)
 
             # Debug Bee Collision Hitbox
-            # pygame.draw.rect(self.screen, ROT, self.player.rect, 1)
+            pygame.draw.rect(self.screen, ROT, self.player.rect, 1)
 
             # Fenster aktualisieren
             pygame.display.flip()
+
+            self.input_processed = False
 
             # Refresh-Zeiten festlegen
             self.clock.tick(120)
@@ -96,6 +112,7 @@ class GameRendering:
     def handle_key_events(self, event: pygame.event.Event):
         if event.key == pygame.K_SPACE:
             self.player.handle_spacebar_pressed()
+            self.input_processed = True
 
     def draw_rectangle(self):
         pos_rect = self.rect[:2]
