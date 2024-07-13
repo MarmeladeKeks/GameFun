@@ -41,7 +41,7 @@ class GameRendering:
             math.sqrt(
                 (pygame.display.get_window_size()[1] - self.player.rect[2]) / WORLD_GRAV
             )
-            + 1000
+            + 1500
         ) * self.time_factor
 
         # Controller Support

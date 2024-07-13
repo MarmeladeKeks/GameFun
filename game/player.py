@@ -19,7 +19,7 @@ class Player(pygame.sprite.Sprite):
         self.animation_frame: float = 0
         self.game = game
         self.image = self.biene_images[self.animation_frame]
-        self.rect = self.image.get_rect(center=(90, 320))
+        self.rect = self.image.get_rect(center=(200, 320))
         self.rect.h = 50
         self.vel: np.ndarray = np.array([0, 0], dtype=float)
         self.acceleration: float = WORLD_GRAV
