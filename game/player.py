@@ -90,3 +90,8 @@ class Player(pygame.sprite.Sprite):
 
     def change_player_colour(self, color: pygame.Color):
         self.image.fill(color)
+
+    def draw_collision_rect(self):
+        collision_rect: pygame.Rect = self.rect.center
+        collision_rect.x = min(collision_rect.w, 40)
+

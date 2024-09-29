@@ -1,5 +1,6 @@
 import math
 
+import numpy as np
 import pygame.display
 
 from game.balken import Balken
