@@ -123,3 +123,4 @@ class GameRendering:
 
         self.rect[:2] = self.rect[:2] + (([80, 0] * self.time) * self.rect[4])
         pygame.draw.rect(self.screen, ROT, rect=self.rect[:4])
+        #test123
